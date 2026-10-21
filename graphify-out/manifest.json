@@ -1,0 +1,80 @@
+{
+  "background.js": {
+    "mtime": 1792607660.8856642,
+    "seen": 1792609276.348066,
+    "ast_hash": "a4bc4a31f50b75da4aef34e8b0960b51",
+    "semantic_hash": ""
+  },
+  "content.js": {
+    "mtime": 1792608670.5191123,
+    "seen": 1792609276.3480673,
+    "ast_hash": "ce0b6b887e381c67926cc6234a9093e3",
+    "semantic_hash": ""
+  },
+  "manifest.json": {
+    "mtime": 1792608161.126586,
+    "seen": 1792609276.3480678,
+    "ast_hash": "7f4cec5de519b2f0a20b2076235e6445",
+    "semantic_hash": ""
+  },
+  ".cocoindex_code/settings.yml": {
+    "mtime": 1792607392.5463135,
+    "seen": 1792607448.1732652,
+    "ast_hash": "b2cbe0a9993aecb74dcec931c475cc6e",
+    "semantic_hash": "b2cbe0a9993aecb74dcec931c475cc6e"
+  },
+  "icons/icon128-active.png": {
+    "mtime": 1792609058.0,
+    "seen": 1792609276.3480716,
+    "ast_hash": "c7322110e454a881cb25ee65f8d04f32",
+    "semantic_hash": ""
+  },
+  "icons/icon128.png": {
+    "mtime": 1792609058.0,
+    "seen": 1792609276.3480723,
+    "ast_hash": "cde02e8709c10e88b27b051b22a4ef56",
+    "semantic_hash": ""
+  },
+  "icons/icon16-active.png": {
+    "mtime": 1792609058.0,
+    "seen": 1792609276.3480725,
+    "ast_hash": "c7322110e454a881cb25ee65f8d04f32",
+    "semantic_hash": ""
+  },
+  "icons/icon16.png": {
+    "mtime": 1792609058.0,
+    "seen": 1792609276.3480732,
+    "ast_hash": "cde02e8709c10e88b27b051b22a4ef56",
+    "semantic_hash": ""
+  },
+  "icons/icon48-active.png": {
+    "mtime": 1792609058.0,
+    "seen": 1792609276.3480735,
+    "ast_hash": "c7322110e454a881cb25ee65f8d04f32",
+    "semantic_hash": ""
+  },
+  "icons/icon48.png": {
+    "mtime": 1792609058.0,
+    "seen": 1792609276.348074,
+    "ast_hash": "cde02e8709c10e88b27b051b22a4ef56",
+    "semantic_hash": ""
+  },
+  "tests/katalon.cjs": {
+    "mtime": 1792608279.6546123,
+    "seen": 1792609276.3480687,
+    "ast_hash": "42d8af1ac6ef2ef55acd56a4d70801f5",
+    "semantic_hash": ""
+  },
+  "tests/pom.cjs": {
+    "mtime": 1792608686.536916,
+    "seen": 1792609276.3480694,
+    "ast_hash": "9ab180a2f8b28c952c5e90ae7eeb2cf9",
+    "semantic_hash": ""
+  },
+  "tests/runtime-invalidation.cjs": {
+    "mtime": 1792608505.0325992,
+    "seen": 1792609276.3480697,
+    "ast_hash": "ef6f71d04a3f9ad5117d5e8ac617f7ef",
+    "semantic_hash": ""
+  }
+}

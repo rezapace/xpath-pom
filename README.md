@@ -8,6 +8,10 @@
 
 Chrome Manifest V3 extension (version 2.7.0) for inspecting page elements and generating XPath, CSS, Playwright, and Katalon locators. It also provides a Generate POM workflow for exporting selected elements as a Katalon/Groovy page-object class. The extension injects its content script on demand; it does not declare host permissions.
 
+## Demo
+
+![xpath-pom demo — element inspector and locator generator](Images/demo.png)
+
 ## Features
 
 - Start and stop inspection with the toolbar button; hover/select page elements to view generated locator suggestions.
