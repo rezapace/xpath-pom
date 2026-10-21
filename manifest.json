@@ -1,0 +1,33 @@
+{
+"update_url": "https://clients2.google.com/service/update2/crx",
+
+  "manifest_version": 3,
+  "name": "xpath-pom",
+  "version": "2.7.0",
+  "description": "xpath-pom — element inspector and locator generator for XPath, CSS, Playwright, and Katalon automation.",
+  "permissions": ["activeTab", "scripting", "contextMenus", "alarms"],
+  "action": {
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    },
+    "default_title": "xpath-pom"
+  },
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "background": {
+    "service_worker": "background.js",
+    "type": "module"
+  },
+
+  "web_accessible_resources": [
+    {
+      "resources": ["icons/*", "content.css"],
+      "matches": ["http://*/*", "https://*/*"]
+    }
+  ]
+}

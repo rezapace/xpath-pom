@@ -1,0 +1,33 @@
+const assert = require('node:assert/strict');
+const fs = require('node:fs'), vm = require('node:vm');
+const source = fs.readFileSync('content.js','utf8');
+const node = tag => ({tag, children:[], appendChild(c){this.children.push(c)}, click(){this.clicked=true}});
+let copied, blob, saved, revoked;
+const document = {createElement(tag){const n=node(tag);if(tag==='a')saved=n;return n}};
+const context = {document, Qt: el=>el.candidates, Gt: x=>x==='//bad'?'valid':'unique', Yt: el=>el,
+ Dt: text=>({click(){copied=text}}), lifecycle:{listen(n,t,fn){n[t]=fn}},
+ Blob: class {constructor(parts){blob=parts.join('')}}, URL:{createObjectURL(){return 'blob:test'},revokeObjectURL(u){revoked=u}}};
+vm.createContext(context);
+vm.runInContext(source.slice(source.indexOf('const katalonSnippet ='),source.indexOf('const t=t=>'))+'\nthis.page=katalonPage;this.preview=katalonPagePreview;',context);
+const el = () => ({tagName:'input',attributes:{'data-test':'username'},ownerDocument:document,getRootNode(){return document},isConnected:true,candidates:[{xpath:'//bad'},{xpath:'//input[1]'},{xpath:'//*[@data-test="txtUsername $foo"]\\\n'}]});
+const page=context.page([{el:el()},{el:el()}]);
+assert.match(page.code,/package pageobjects.web.saucedemo/);
+assert.match(page.code,/import com.kms.katalon.core.testobject.TestObject/);
+assert.match(page.code,/public class ScannedPage extends BaseSauceDemoPage/);
+assert.match(page.code,/public ScannedPage\(\) \{\n        super\(\)/);
+assert.match(page.code,/private TestObject txtUsername2/);
+assert.ok(page.code.includes(`txtUsername2 = createTestObjectByXpath('txtUsername2',`));
+assert.ok(page.code.includes('txtUsername \\$foo'));
+assert.ok(!page.code.includes('//bad'));
+assert.equal(page.count,2);
+assert.equal(context.page([]).count,0);
+const shadow=el();shadow.getRootNode=()=>({});
+assert.equal(context.page([{el:shadow}]).skipped,1);
+const container=node('div');context.preview([{el:el()}],container);
+const panel=container.children[0];
+panel.children[1].click(); assert.equal(copied,context.page([{el:el()}]).code);
+panel.children[2].click({stopPropagation(){}});assert.equal(blob,copied);assert.equal(saved.download,'ScannedPage.groovy');assert.equal(revoked,'blob:test');
+const text=n=>n.children?.length?n.children.map(text).join(''):n.textContent||'';
+assert.equal(text(panel.children[3]),copied);
+assert.ok(source.includes('button.textContent="Generate POM"'));
+console.log('PASS: POM structure, unique names, escaping, context skips, empty scans, highlighted preview, copy and download');
