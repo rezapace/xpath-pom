@@ -1,0 +1,50 @@
+{
+  "name": "@rezapace/xpath-pom",
+  "version": "2.7.0",
+  "description": "Chrome MV3 extension that inspects page elements and generates XPath, CSS, Playwright and Katalon locators, plus a Generate POM workflow for Katalon/Groovy page objects.",
+  "keywords": [
+    "chrome-extension",
+    "manifest-v3",
+    "xpath",
+    "css-selectors",
+    "playwright",
+    "katalon",
+    "page-object-model",
+    "test-automation",
+    "locator-generator"
+  ],
+  "license": "MIT",
+  "author": "Reza Hidayat <97022190+rezapace@users.noreply.github.com> (https://github.com/rezapace)",
+  "homepage": "https://github.com/rezapace/xpath-pom#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rezapace/xpath-pom.git"
+  },
+  "bugs": {
+    "url": "https://github.com/rezapace/xpath-pom/issues"
+  },
+  "files": [
+    "manifest.json",
+    "background.js",
+    "content.js",
+    "content.css",
+    "background.js.map",
+    "content.js.map",
+    "icons/*.png",
+    "Images/*.png",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "test": "node tests/katalon.cjs && node tests/pom.cjs && node tests/runtime-invalidation.cjs",
+    "package": "node scripts/package-release.cjs",
+    "lint:manifest": "node -e \"const m=require('./manifest.json'); if(m.manifest_version!==3) throw new Error('manifest_version must be 3'); if(m.version!==require('./package.json').version) throw new Error('manifest.json and package.json versions differ'); console.log('manifest ok:', m.name, m.version)\""
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com",
+    "access": "public"
+  }
+}

@@ -1,0 +1,61 @@
+name: Release
+
+on:
+  push:
+    tags: ['v*']
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: Existing tag to (re)build assets for, e.g. v2.7.0
+        required: true
+
+permissions:
+  contents: write
+  id-token: write
+  attestations: write
+
+jobs:
+  release:
+    name: Build production zip + publish assets
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.inputs.tag || github.ref }}
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Validate manifest + version sync
+        run: npm run lint:manifest
+
+      - name: Run regression tests
+        run: npm test
+
+      - name: Build production zip
+        run: npm run package
+
+      - name: Checksums
+        run: |
+          cd release
+          shasum -a 256 *.zip | tee SHA256SUMS.txt
+
+      - name: Attest build provenance (SLSA)
+        uses: actions/attest-build-provenance@v1
+        with:
+          subject-path: release/*.zip
+
+      - name: Upload assets to GitHub Release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TAG: ${{ github.event.inputs.tag || github.ref_name }}
+        run: |
+          if gh release view "$TAG" >/dev/null 2>&1; then
+            gh release upload "$TAG" release/*.zip release/SHA256SUMS.txt --clobber
+          else
+            gh release create "$TAG" release/*.zip release/SHA256SUMS.txt \
+              --title "xpath-pom ${TAG#v}" \
+              --generate-notes \
+              --verify-tag
+          fi

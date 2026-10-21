@@ -3,6 +3,9 @@
 [![Download](https://img.shields.io/badge/Download-latest%20release-2ea44f?logo=googlechrome&logoColor=white)](https://github.com/rezapace/xpath-pom/releases/latest)
 [![Version](https://img.shields.io/badge/version-2.7.0-blue)](https://github.com/rezapace/xpath-pom/releases)
 [![License](https://img.shields.io/badge/license-MIT-lightgrey)](https://github.com/rezapace/xpath-pom)
+[![CI](https://github.com/rezapace/xpath-pom/actions/workflows/ci.yml/badge.svg)](https://github.com/rezapace/xpath-pom/actions/workflows/ci.yml)
+[![Release](https://github.com/rezapace/xpath-pom/actions/workflows/release.yml/badge.svg)](https://github.com/rezapace/xpath-pom/actions/workflows/release.yml)
+[![GitHub Packages](https://img.shields.io/badge/package-@rezapace%2Fxpath--pom-24292e?logo=github)](https://github.com/rezapace/xpath-pom/pkgs/npm/xpath-pom)
 
 > **Download (production package):** [xpath-pom-v2.7.0.zip](https://github.com/rezapace/xpath-pom/releases/latest/download/xpath-pom-v2.7.0.zip) — unzip, then load the folder via `chrome://extensions` → *Load unpacked*.
 
@@ -31,7 +34,7 @@ Stability values are heuristic recommendations, not guarantees that a locator re
 3. Choose **Load unpacked** and select this project directory.
 4. After changing extension files, return to `chrome://extensions` and click the extension's **Reload** button. Reload the target page as needed so its content script uses the updated code.
 
-The manifest uses the extension action, `activeTab`, `scripting`, `contextMenus`, and `alarms`; no build/install package or npm dependencies are provided in this repository.
+The manifest uses the extension action, `activeTab`, `scripting`, `contextMenus`, and `alarms`. The extension has no runtime dependencies; `package.json` exists only for the test/lint/package scripts and for publishing the built files to GitHub Packages.
 
 ## Use
 
@@ -62,13 +65,51 @@ background.js                 Extension service worker (bundled)
 content.js                    Injected inspector, locator and export logic
 content.css                   Inspector styles
 icons/                        Toolbar and extension icons
- tests/
-   katalon.cjs                 Katalon snippet tests
-   pom.cjs                     POM generation tests
-   runtime-invalidation.cjs    Lifecycle/runtime tests
+Images/                       Screenshots used by this README
+tests/
+  katalon.cjs                 Katalon snippet tests
+  pom.cjs                     POM generation tests
+  runtime-invalidation.cjs    Lifecycle/runtime tests
+scripts/package-release.cjs   Builds the production zip
+package.json                  Metadata, test/lint/package scripts (no dependencies)
+.github/workflows/            CI, Release and Publish workflows
 ```
 
-`background.js` and `content.js` are shipped bundles; corresponding `.map` source maps are present. There is no source/build pipeline or dependency manifest in this repository.
+`background.js` and `content.js` are shipped bundles; corresponding `.map` source maps are present. There is no source/build pipeline for the bundles themselves — the repository ships the built code. `package.json` carries no runtime dependencies; the scripts only orchestrate the Node-based tests and the release packaging step.
+
+## Development
+
+Requires Node.js 20 or newer and the `zip` binary (preinstalled on macOS and most Linux images).
+
+```sh
+npm test              # katalon.cjs + pom.cjs + runtime-invalidation.cjs
+npm run lint:manifest # manifest_version === 3 and manifest/package version sync
+npm run package       # builds release/xpath-pom-v<version>.zip
+```
+
+`npm run package` stages `manifest.json`, `background.js`, `content.js`, `content.css` and `icons/` into a `xpath-pom/` folder and zips it — that archive is the production package offered in the releases.
+
+## Automation
+
+| Workflow | Trigger | What it does |
+| --- | --- | --- |
+| `ci.yml` | push to `main`, pull requests, manual | Manifest/version check, regression tests, builds the zip and uploads it as a build artifact (Node 20/22/24) |
+| `release.yml` | tag `v*`, manual with a tag | Re-builds the zip, writes `SHA256SUMS.txt`, attests build provenance (SLSA) and uploads the assets to the GitHub Release |
+| `publish-package.yml` | release published, manual | `npm publish` of `@rezapace/xpath-pom` to GitHub Packages |
+
+## Package (GitHub Packages)
+
+The extension is also published as an npm package so the built files can be pulled programmatically.
+
+```sh
+# .npmrc
+@rezapace:registry=https://npm.pkg.github.com
+//npm.pkg.github.com/:_authToken=${GITHUB_TOKEN}
+
+npm install @rezapace/xpath-pom
+```
+
+The package contains the same runtime files as the release zip (`manifest.json`, `background.js`, `content.js`, `content.css`, `icons/`).
 
 ## Known limitations
 
